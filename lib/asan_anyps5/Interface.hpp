@@ -17,6 +17,8 @@ struct CallSite {
     const char* function;
 };
 
+extern "C" {
+
 void* __asan_addr_is_in_fake_stack_nid_no_patch(void* fakeStack, void* address, void** begin, void** end, const CallSite& callSite = {0, 0, "__asan_addr_is_in_fake_stack"});
 int __asan_address_is_poisoned_nid_no_patch(const volatile void* address, const CallSite& callSite = {0, 0, "__asan_address_is_poisoned"});
 void* __asan_aligned_alloc_nid_no_patch(std::size_t alignment, std::size_t size, const CallSite& callSite = {0, 0, "__asan_aligned_alloc"});
@@ -291,5 +293,7 @@ void __ubsan_handle_type_mismatch_v1_nid_no_patch(void* data, std::uintptr_t poi
 void __ubsan_handle_type_mismatch_v1_abort_nid_no_patch(void* data, std::uintptr_t pointer, const CallSite& callSite = {0, 0, "__ubsan_handle_type_mismatch_v1_abort"});
 void __ubsan_handle_vla_bound_not_positive_nid_no_patch(void* data, std::uintptr_t bound, const CallSite& callSite = {0, 0, "__ubsan_handle_vla_bound_not_positive"});
 void __ubsan_handle_vla_bound_not_positive_abort_nid_no_patch(void* data, std::uintptr_t bound, const CallSite& callSite = {0, 0, "__ubsan_handle_vla_bound_not_positive_abort"});
+
+}
 
 }
