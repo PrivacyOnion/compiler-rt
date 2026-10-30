@@ -1,0 +1,66 @@
+AnyPS5 sanitizer runtime port
+
+This directory is a modified sanitizer runtime port, not an unmodified upstream
+compiler-rt runtime. It was introduced on 2026-10-30 from the AnyPS5 runtime at
+1bb57ba9ff653a2cbffa1294c2cc151c1cc03a71. AnyPS5 contributions retain the project's
+GNU General Public License version 2 terms, reproduced in LICENSE.GPL-2.0.
+
+The compiler-rt adaptations retain the upstream Apache License version 2.0 with
+LLVM Exceptions. The full licence, LLVM exception, legacy notices and disclaimers
+are preserved in ../../LICENSE.TXT. The unmodified source files and their original
+notices remain in the parent compiler-rt tree at LLVM 18.1.8, commit
+3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff.
+
+Upstream notice retained for the adapted compiler-rt portions:
+
+Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+See https://llvm.org/LICENSE.txt for license information.
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+Source mapping relative to compiler-rt/lib:
+
+Runtime.cpp: asan/asan_poisoning.cpp (shadow segments, user/intra-object/alloca
+poisoning), asan/asan_rtl.cpp and asan/asan_report.cpp (access callbacks and
+report dispatch), and public sanitizer interfaces. The host entry points,
+caller-site transport and validation are modified for AnyPS5.
+
+src/Container.hpp: asan/asan_poisoning.cpp, including FixUnalignedStorage,
+contiguous and double-ended container transitions and FindBadAddress.
+
+src/Allocator.cpp: asan/asan_allocator.cpp (redzone selection, allocation
+validation and diagnostic text), sanitizer_common/sanitizer_allocator_size_class_map.h
+(size-class computation), and asan/asan_stats.cpp (statistics text). The backing
+provider, std::map registry and global quarantine are host integration changes.
+
+src/FakeStack.cpp: asan/asan_fake_stack.h and asan/asan_fake_stack.cpp (flag/frame
+layout, size classes, allocation and garbage collection), and asan/asan_thread.cpp
+(fiber/no-return behavior). Allocation, locking and TLS lifecycle are modified.
+
+src/Globals.cpp and src/Globals.hpp: asan/asan_globals.cpp and
+asan/asan_interface_internal.h (global descriptors, redzones and ODR diagnostics).
+The descriptor-copy registry and array validation are AnyPS5 changes.
+
+src/Describe.cpp, src/Describe.hpp, src/Report.hpp and src/ShadowCheck.hpp:
+asan/asan_descriptions.cpp, asan/asan_errors.cpp, asan/asan_report.cpp and
+asan/asan_poisoning.cpp (address classifications, shadow magic and report text),
+with host address lookup and additional validation.
+
+src/Ubsan.cpp: ubsan/ubsan_handlers.cpp, ubsan/ubsan_handlers.h,
+ubsan/ubsan_value.cpp, ubsan/ubsan_value.h, ubsan/ubsan_diag.cpp and
+ubsan/ubsan_monitor.cpp (metadata, value decoding, handler decisions and diagnostics).
+Legacy type-mismatch and nonnull-return layouts are based on the public
+LLVM 3.8 ABI declarations at llvmorg-3.8.0/compiler-rt/lib/ubsan/ubsan_handlers.h;
+the port does not compile a LLVM 3.8 implementation file.
+
+src/Coverage.cpp: sanitizer_common/sanitizer_coverage_libcdep_new.cpp and
+sanitizer_common/sanitizer_coverage_interface.inc (coverage interface and file
+format), implemented with host file I/O and module lookup.
+
+src/ShadowWindows.cpp, src/ShadowLinux.cpp, src/BackingMemory.hpp,
+src/ModuleLookup.cpp, src/ReportFile.cpp, src/StackBounds.cpp and src/StackTrace.cpp:
+AnyPS5 host integration using the Windows/POSIX platform APIs. The shadow scale
+and offset match LLVM 18.1.8 instrumentation. They are included in this port to
+keep the runtime and its host adaptations together.
+
+Interface.hpp and CMakeLists.txt provide the AnyPS5 integration boundary and
+source build. This port remains partial and is not a console-verified runtime.
