@@ -1,3 +1,7 @@
+// AnyPS5 sanitizer runtime host integration, introduced 2026-10-30.
+// SPDX-License-Identifier: GPL-2.0-only
+// See LICENSE.GPL-2.0 and NOTICE in lib/asan_anyps5.
+
 #pragma once
 
 #include <cstddef>
