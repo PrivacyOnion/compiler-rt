@@ -16,7 +16,7 @@ add_library(compiler_rt_anyps5 OBJECT
     src/Ubsan.cpp)
 if(WIN32)
     target_sources(compiler_rt_anyps5 PRIVATE src/ShadowWindows.cpp)
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+else()
     target_sources(compiler_rt_anyps5 PRIVATE src/ShadowLinux.cpp)
 endif()
 target_compile_features(compiler_rt_anyps5 PUBLIC cxx_std_20)

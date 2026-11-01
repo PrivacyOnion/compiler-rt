@@ -5,7 +5,6 @@
 #include "ShadowAddressSpace.hpp"
 #include "BackingMemory.hpp"
 
-#if defined(__linux__)
 #include <sys/mman.h>
 #include <atomic>
 #include <mutex>
@@ -53,4 +52,3 @@ extern "C" void FreeBacking_nid_no_patch(void* pointer, std::size_t alignment) n
 }
 
 }
-#endif

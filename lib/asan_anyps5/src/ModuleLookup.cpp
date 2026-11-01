@@ -63,7 +63,7 @@ std::uintptr_t HostProcessId_nid_no_patch() {
 }
 
 }  // namespace AsanRuntime
-#elif defined(__linux__)
+#else
 #include <dlfcn.h>
 #include <unistd.h>
 #if defined(__GLIBC__)
